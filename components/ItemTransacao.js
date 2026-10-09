@@ -16,13 +16,18 @@ const ICONES = {
   outros: 'ellipsis-horizontal-circle',
 };
 
-export function ItemTransacao({ descricao, valor, categoria, tipo, data, onPress }) {
+export function ItemTransacao({ descricao, valor, categoria, tipo, data, onPress, onLongPress }) { // ← NOVO: prop onLongPress
   const isReceita = tipo === 'receita';
   const nomeIcone = ICONES[categoria] ?? 'ellipsis-horizontal-circle';
 
+  // Renderiza o item da lista: ícone da categoria, descrição/data e valor formatado
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.7}>
-      {/* Ícone da categoria */}
+    <TouchableOpacity
+      style={styles.container}
+      onPress={onPress}
+      onLongPress={onLongPress}                                                                    // ← NOVO: dispara a exclusão (toque longo)
+      activeOpacity={0.7}
+    >
       <View style={[
         styles.iconeContainer,
         { backgroundColor: isReceita ? cores.receitaFundo : cores.despesaFundo }
@@ -34,13 +39,11 @@ export function ItemTransacao({ descricao, valor, categoria, tipo, data, onPress
         />
       </View>
 
-      {/* Descrição e data */}
       <View style={styles.info}>
         <Text style={styles.descricao} numberOfLines={1}>{descricao}</Text>
         <Text style={styles.data}>{data}</Text>
       </View>
 
-      {/* Valor */}
       <Text style={[styles.valor, { color: isReceita ? cores.receita : cores.despesa }]}>
         {isReceita ? '+' : '-'} R$ {valor.toFixed(2)}
       </Text>
@@ -56,7 +59,6 @@ const styles = StyleSheet.create({
     borderRadius: raio.md,
     padding: espacamento.md,
     marginBottom: espacamento.sm,
-
     // Sombra (iOS):
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -65,7 +67,6 @@ const styles = StyleSheet.create({
     // Sombra (Android):
     elevation: 2,
   },
-
   iconeContainer: {
     width: 44,
     height: 44,
@@ -74,23 +75,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: espacamento.md,
   },
-
   info: {
     flex: 1,                     // ocupa todo o espaço entre o ícone e o valor
   },
-
   descricao: {
     fontSize: 15,
     fontWeight: '600',
     color: cores.texto,
   },
-
   data: {
     fontSize: 12,
     color: cores.subtexto,
     marginTop: 2,
   },
-
   valor: {
     fontSize: 15,
     fontWeight: '700',

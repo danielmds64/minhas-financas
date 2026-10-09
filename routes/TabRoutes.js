@@ -28,7 +28,6 @@ export function TabRoutes() {
                 tabBarStyle: {
                     backgroundColor: '#fff',
                     borderTopColor: '#eee',
-                    height: 60,
                     paddingBottom: 8,
                     paddingTop: 4,
                 },

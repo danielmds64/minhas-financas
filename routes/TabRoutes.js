@@ -2,11 +2,12 @@
 
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-// A aba Dashboard aponta para um Stack (criado no Passo 8), não diretamente para a tela
 import { DashboardStack } from './DashboardStack';
 import { NovaTransacaoScreen } from '../screens/NovaTransacaoScreen';
 import { RelatorioScreen } from '../screens/RelatorioScreen';
+import { MapaScreen } from '../screens/MapaScreen';
 import { SobreScreen } from '../screens/SobreScreen';
 
 const Tab = createBottomTabNavigator();
@@ -15,10 +16,13 @@ const ICONES_TAB = {
     Dashboard: { ativa: 'home', inativa: 'home-outline' },
     'Nova Transação': { ativa: 'add-circle', inativa: 'add-circle-outline' },
     Relatório: { ativa: 'bar-chart', inativa: 'bar-chart-outline' },
+    Mapa: { ativa: 'map', inativa: 'map-outline' },
     Sobre: { ativa: 'information-circle', inativa: 'information-circle-outline' },
 };
 
 export function TabRoutes() {
+    const insets = useSafeAreaInsets();  // ← NOVO: área segura (barra de navegação do sistema)
+
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -28,7 +32,8 @@ export function TabRoutes() {
                 tabBarStyle: {
                     backgroundColor: '#fff',
                     borderTopColor: '#eee',
-                    paddingBottom: 8,
+                    height: 60 + insets.bottom,   // ← NOVO: soma o inset à altura
+                    paddingBottom: 8 + insets.bottom,    // ← NOVO: soma o inset ao padding
                     paddingTop: 4,
                 },
                 tabBarIcon: ({ focused, color, size }) => {
@@ -40,6 +45,7 @@ export function TabRoutes() {
             <Tab.Screen name="Dashboard" component={DashboardStack} />
             <Tab.Screen name="Nova Transação" component={NovaTransacaoScreen} />
             <Tab.Screen name="Relatório" component={RelatorioScreen} />
+            <Tab.Screen name="Mapa" component={MapaScreen} />
             <Tab.Screen name="Sobre" component={SobreScreen} />
         </Tab.Navigator>
     );
